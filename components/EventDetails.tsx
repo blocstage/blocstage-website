@@ -11,6 +11,7 @@ import {
   Calendar,
   Bell,
 } from 'lucide-react'; // Ensure you have lucide-react installed
+import { pageRoutes } from '../utils/pageRoutes';
 
 interface EventDetailsProps {
   eventId: string; // The ID of the event to display
@@ -249,7 +250,7 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
       }
 
       alert("Event cancelled successfully.");
-      router.push("/viewevent");
+      router.push(pageRoutes.events);
     } catch (e: any) {
       console.error("Failed to cancel event:", e);
       alert(`Failed to cancel event: ${e.message}`);

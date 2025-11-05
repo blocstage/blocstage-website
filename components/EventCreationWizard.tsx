@@ -9,6 +9,7 @@ import AgendaScheduleForm from "./AgendaScheduleForm";
 import TicketsForm from "./TicketsForm";
 import EventPreview from "./EventPreview";
 import { createSlug } from "@/lib/slugUtils";
+import { pageRoutes } from "../utils/pageRoutes";
 
 const steps = [
   { id: "details", title: "Event Details", completed: false },
@@ -100,7 +101,7 @@ export default function EventCreationWizard() {
       const authToken = localStorage.getItem("authToken");
       if (!authToken) {
         alert("Authentication token not found. Please log in.");
-        router.push("/login");
+        router.push(pageRoutes.login);
         return;
       }
 
@@ -205,7 +206,7 @@ export default function EventCreationWizard() {
         
         if (response.status === 401) {
           alert("Authentication failed. Please log in again.");
-          router.push("/login");
+          router.push(pageRoutes.login);
           return;
         }
         
@@ -253,7 +254,7 @@ export default function EventCreationWizard() {
       }
 
       alert("Event published successfully!");
-      const destination = `/viewevent`;
+      const destination = pageRoutes.events;
       router.push(destination);
 
       
@@ -270,7 +271,7 @@ export default function EventCreationWizard() {
       {isLoading && (
       <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50">
         <div className="flex flex-col items-center">
-          <div className="w-16 h-16 border-4 border-t-4 border-[#F4511E] border-gray-200 rounded-full animate-spin mb-4"></div>
+          <div className="w-16 h-16 border-4 border-t-4 border[#F4511E] border-gray-200 rounded-full animate-spin mb-4"></div>
           <p className="text-white text-lg">Publishing your event...</p>
         </div>
       </div>

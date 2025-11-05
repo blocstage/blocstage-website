@@ -1,14 +1,13 @@
 "use client";
-
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import EditEventForm from "@/components/EditEventForm";
+import EventCreationWizard from "@/components/EventCreationWizard";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-export const dynamic = "force-dynamic";
+import { pageRoutes } from "../../../../utils/pageRoutes";
 
-const EditEventPage = ({ params }: { params: { id: string } }) => {
+
+const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
@@ -16,8 +15,8 @@ const EditEventPage = ({ params }: { params: { id: string } }) => {
     const authToken = localStorage.getItem("authToken");
     
     if (!authToken) {
-      alert("Please log in to edit events.");
-      router.push("/login");
+      alert("Please log in to create an event.");
+      router.push(pageRoutes.login);
       return;
     }
   }, [router]);
@@ -29,7 +28,7 @@ const EditEventPage = ({ params }: { params: { id: string } }) => {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-t-4 border-[#F4511E] border-gray-200 rounded-full animate-spin mb-4 mx-auto"></div>
+          <div className="w-16 h-16 border-4 border-t-4 border-[#F4511E] rounded-full animate-spin mb-4 mx-auto"></div>
           <p className="text-gray-600">Redirecting to login...</p>
         </div>
       </div>
@@ -38,16 +37,18 @@ const EditEventPage = ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Header/>
+      
+       <Header />
+     
       <div className="hidden md:block">
-        <Sidebar />
+      <Sidebar />
       </div>
       <main className="flex-1 mt-12">
-        <EditEventForm eventId={params.id} />
+        <EventCreationWizard />
       </main>
       {/* <Footer /> */}
     </div>
   );
-};
-
-export default EditEventPage;
+  };
+  
+  export default Page;

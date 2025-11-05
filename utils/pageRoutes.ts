@@ -1,3 +1,5 @@
+import { createSlug } from "../lib/slugUtils";
+
 export const pageRoutes = {
   home: "/",
 
@@ -9,7 +11,12 @@ export const pageRoutes = {
   login: "/login",
   forgotPassword: "/forgot-password",
 
-  // Dashboard routes
-  dashboard: "/dashboard",
-  viewEvent: "/view-event",
+  // Events routes
+  events: "/events",
+  createEvent: "/events/create",
+  editEvent: (eventId: string) => `/events/${eventId}/edit`,
+  previewEvent: (event: { short_code?: string; title: string; id: string }) => {
+    const slug = event.short_code || `${createSlug(event.title)}--${event.id}`;
+    return `/events/${slug}/preview`;
+  },
 };

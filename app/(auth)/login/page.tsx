@@ -43,7 +43,7 @@ const LoginPage = () => {
         const token = data.token;
         localStorage.setItem("authToken", token);
 
-        router.push(pageRoutes.dashboard);
+        router.push(pageRoutes.events);
       } else {
         // Handle errors from the API
         const errorData = await response.json();
