@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Lock, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
+import { pageRoutes } from "../../../utils/pageRoutes";
+import Logo from "../../../components/Logo";
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
@@ -88,7 +90,7 @@ const ResetPasswordPage = () => {
         setSuccess(true);
         setMessage("Password has been successfully reset!");
         setTimeout(() => {
-          router.push("/login");
+          router.push(pageRoutes.login);
         }, 3000);
       } else {
         const errorData = await response.json();
@@ -127,7 +129,7 @@ const ResetPasswordPage = () => {
             Your password has been successfully reset. You will be redirected to the login page shortly.
           </p>
           <Link
-            href="/login"
+            href={pageRoutes.login}
             className="inline-block py-3 px-6 bg-[#092C4C] text-white font-semibold rounded-md shadow-md hover:bg-[#072036] transition-colors duration-300"
           >
             Go to Login
@@ -141,14 +143,7 @@ const ResetPasswordPage = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
       {/* Logo Section */}
       <div className="absolute top-6 left-6">
-        <a href="/landingpage" className="cursor-pointer">
-          <Image
-            src="/images/logoorange.png"
-            alt="Company Logo"
-            width={150}
-            height={40}
-          />
-        </a>
+       <Logo />
       </div>
 
       <div className="bg-white p-8 md:p-12 rounded-lg shadow-lg max-w-md w-full">
@@ -229,7 +224,7 @@ const ResetPasswordPage = () => {
 
         <div className="mt-8 text-sm text-gray-600 text-center">
           Remember your password?{" "}
-          <Link href="/login" className="text-[#f4511e] font-semibold hover:underline">
+          <Link href={pageRoutes.login} className="text-[#f4511e] font-semibold hover:underline">
             Sign In
           </Link>
         </div>
