@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -366,7 +367,7 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-t-4 border-[#F4511E] border-gray-200 rounded-full animate-spin mb-4 mx-auto"></div>
+          <div className="w-16 h-16 border-4 border-t-4 bordr-[#F4511E] border-gray-200 rounded-full animate-spin mb-4 mx-auto"></div>
           <p>Loading event details...</p>
         </div>
       </div>
