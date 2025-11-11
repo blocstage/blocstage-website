@@ -9,19 +9,17 @@ import { pageRoutes } from "../../utils/pageRoutes";
 const DashboardHeader = () => {
   const { toggleSideBar } = useSideBarStore();
   const pathname = usePathname();
-  const { createEvent, editProfile, editEvent, events, previewEvent } =
-    pageRoutes;
+  const { editProfile, events, myTickets } = pageRoutes;
 
   console.log(pathname);
 
   const setHeaderTitle = () => {
     switch (true) {
-      case pathname === createEvent:
-      case pathname === events:
-      case pathname.includes(editEvent("")):
-      case pathname.includes(previewEvent({ title: "", id: "" })):
-        return "Event";
-      case pathname === editProfile:
+      case pathname.startsWith(events):
+        return "Events";
+      case pathname.startsWith(myTickets):
+        return "My Tickets";
+      case pathname.startsWith(editProfile):
         return "Profile";
 
       default:

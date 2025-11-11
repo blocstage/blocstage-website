@@ -2,15 +2,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { CalendarDays, UserPen, Trophy, Ticket, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
-import { pageRoutes } from "../utils/pageRoutes";
-import Logo from "./Logo";
-import { menuItems } from "../utils/menuItems";
-import { getInitials } from "../utils/helpers";
-import { useSideBarStore } from "../store/SideBarStore";
+import { pageRoutes } from "../../utils/pageRoutes";
+import Logo from "../Logo";
+import { menuItems } from "../../utils/menuItems";
+import { getInitials } from "../../utils/helpers";
+import { useSideBarStore } from "../../store/SideBarStore";
 
 const sectionItems = [
   { icon: LogOut, title: "Logout" },
@@ -23,6 +23,7 @@ interface UserData {
 }
 
 export default function Sidebar() {
+  const pathname = usePathname();
   const { isSideBarOpen, closeSideBar } = useSideBarStore();
   const [userData, setUserData] = useState<UserData>({
     name: "Loading...",
@@ -149,12 +150,15 @@ export default function Sidebar() {
             <nav className="space-y-1 border-b border-gray-200 pb-4 mb-6 mt-[72px] ">
               {menuItems.map((item, index) => {
                 const IconComponent = item.icon;
+                const isActive =
+                  pathname === item.route || pathname.startsWith(item.route);
+
                 return (
                   <div
                     key={index}
                     onClick={() => router.push(item.route)}
                     className={`flex items-center justify-between px-3 py-4 rounded-lg cursor-pointer font-medium transition-colors ${
-                      item.active
+                      isActive
                         ? "bg-[#FFECE5] text-[#E04E1E]"
                         : "text-gray-700 hover:bg-gray-50"
                     }`}

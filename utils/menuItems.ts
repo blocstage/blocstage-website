@@ -1,4 +1,4 @@
-import { CalendarDays, Trophy, Ticket,  } from "lucide-react";
+import { CalendarDays, Trophy, Ticket } from "lucide-react";
 import { pageRoutes } from "./pageRoutes";
 
 export const menuItems = [
@@ -6,8 +6,8 @@ export const menuItems = [
     icon: CalendarDays,
     title: "Events",
     route: pageRoutes.events,
-    active: true,
   },
-  { icon: Ticket, title: "My Tickets", route: "#" },
+  { icon: Ticket, title: "My Tickets", route: pageRoutes.myTickets },
+
   { icon: Trophy, title: "Rewards", route: "#" },
 ];

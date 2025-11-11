@@ -22,5 +22,9 @@ export const pageRoutes = {
 
 
   //profile routes
-  editProfile : '/edit-profile'
+  editProfile : '/edit-profile',
+
+
+  //my tickets
+  myTickets : '/my-tickets',
 };
