@@ -132,10 +132,10 @@ export default async function EventPreviewPage({
   })}`;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header2 />
+    <div className=" bg-gray-50">
+      {/* <Header2 /> */}
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 max-w-7xl">
+      <main className="container mx-auto max-w-7xl lg:pt-10">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           {/* Banner Image */}
           <div className="relative h-64 sm:h-80 lg:h-96 w-full">
@@ -263,7 +263,7 @@ export default async function EventPreviewPage({
           </div>
         </div>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Upload, X } from "lucide-react";
 import Image from "next/image";
+import { pageRoutes } from "../../../../utils/pageRoutes";
 
 interface UserProfile {
   username: string;
@@ -156,7 +157,7 @@ export default function EditProfilePage() {
     try {
       const authToken = localStorage.getItem("authToken");
       if (!authToken) {
-        router.push("/login");
+        router.push(pageRoutes.login);
         return;
       }
 
@@ -199,18 +200,18 @@ export default function EditProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center mb-8">
           <Button
             variant="ghost"
             onClick={() => router.back()}
-            className="mr-4 p-2"
+            className="p-2"
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-3xl font-bold text-[#092C4C]">Edit Profile</h1>
+          <h1 className="text-xl">Back</h1>
         </div>
 
         {/* Success Message */}

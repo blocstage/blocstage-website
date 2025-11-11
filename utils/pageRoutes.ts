@@ -19,4 +19,8 @@ export const pageRoutes = {
     const slug = event.short_code || `${createSlug(event.title)}--${event.id}`;
     return `/events/${slug}/preview`;
   },
+
+
+  //profile routes
+  editProfile : '/edit-profile'
 };

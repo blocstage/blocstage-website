@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <DashboardHeader />
 
         {/* Main content area scrollable */}
-        <main className="flex-1 overflow-y-auto scrollbar-hide pb-10 pt-8">
+        <main className="flex-1 overflow-y-auto scrollbar-hide pb-10 pt-8 lg:pt-20">
           {children}
         </main>
       </div>
