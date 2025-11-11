@@ -400,7 +400,7 @@ const EventDashboard = () => {
       {/* Greeting and "Create Event" button */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 lg:mb-8 space-y-4 sm:space-y-0">
         <div className="flex flex-col">
-          <h1 className="text-xl sm:text-2xl font-bold text-[#092C4C] mb-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#092C4C] mb-2 line-clamp-1">
             Good {greeting}, {capitalizeWords(userData?.name || "")}!
           </h1>
           <p className="text-sm sm:text-base text-gray-600">

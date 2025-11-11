@@ -9,6 +9,8 @@ import Image from "next/image";
 import { pageRoutes } from "../utils/pageRoutes";
 import Logo from "./Logo";
 import { menuItems } from "../utils/menuItems";
+import { getInitials } from "../utils/helpers";
+import { useSideBarStore } from "../store/SideBarStore";
 
 const sectionItems = [
   { icon: LogOut, title: "Logout" },
@@ -21,6 +23,7 @@ interface UserData {
 }
 
 export default function Sidebar() {
+  const { isSideBarOpen, closeSideBar } = useSideBarStore();
   const [userData, setUserData] = useState<UserData>({
     name: "Loading...",
     email: "Loading...",
@@ -113,14 +116,6 @@ export default function Sidebar() {
   }, []);
 
   // Generate initials from name
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
 
   // Handle logout
   const handleLogout = () => {
@@ -130,90 +125,106 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="h-screen w-full max-w-[272px] bg-white border-r border-gray-200 flex flex-col justify-between">
-      {/* Top Section */}
-      <div className="px-2 py-8 overflow-y-auto">
-        {/* Logo */}
-        <div className="px-4">
-          <Logo />
-        </div>
+    <>
+      <div
+        onClick={closeSideBar}
+        className={`bg-[#000]/10 fixed top-0 bottom-0 right-0 left-0 md:hidden ${
+          isSideBarOpen ? "max-md:translate-x-0" : "max-md:-translate-x-[200%]"
+        } `}
+      ></div>
+      <div
+        className={`max-md:fixed h-screen w-full max-w-[272px] bg-white border-r border-gray-200 flex flex-col justify-between duration-150 z-50 ${
+          isSideBarOpen ? "max-md:translate-x-0" : "max-md:-translate-x-[200%]"
+        } `}
+      >
+        {/* Top Section */}
+        <div className="px-2 py-8 overflow-y-auto  scrollbar-hide h-full">
+          {/* Logo */}
+          <div className="px-4">
+            <Logo />
+          </div>
 
-        {/* Menu Items */}
-        <nav className="space-y-1 border-b border-gray-200 pb-4 mb-6 mt-[72px]">
-          {menuItems.map((item, index) => {
-            const IconComponent = item.icon;
-            return (
-              <div
-                key={index}
-                onClick={() => router.push(item.route)}
-                className={`flex items-center justify-between px-3 py-4 rounded-lg cursor-pointer font-medium transition-colors ${
-                  item.active
-                    ? "bg-[#FFECE5] text-[#E04E1E]"
-                    : "text-gray-700 hover:bg-gray-50"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  {IconComponent && <IconComponent className="w-5 h-5" />}
-                  <span className="text-sm font-medium">{item.title}</span>
-                </div>
-              </div>
-            );
-          })}
-        </nav>
-
-        {/* More Section */}
-        <div className="mt-80">
-          <span className="text-xs font-medium text-[#98A2B3] tracking-wider block mb-4">
-            More
-          </span>
-          <nav className="space-y-1 mb-8">
-            {sectionItems.map((item, index) => {
-              const IconComponent = item.icon;
-              return (
-                <div
-                  key={index}
-                  onClick={
-                    item.title === "Logout"
-                      ? handleLogout
-                      : item.title === "Edit Profile"
-                      ? () => router.push("/edit-profile")
-                      : undefined
-                  }
-                  className="flex items-center justify-between px-3 py-4 rounded-lg cursor-pointer font-light text-[#282828] hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    {IconComponent && (
-                      <IconComponent className="w-5 h-5 text-[#282828]" />
-                    )}
-                    <span className="text-sm font-medium">{item.title}</span>
+          <div className="flex flex-col justify-between  h-full">
+            {/* Menu Items */}
+            <nav className="space-y-1 border-b border-gray-200 pb-4 mb-6 mt-[72px] ">
+              {menuItems.map((item, index) => {
+                const IconComponent = item.icon;
+                return (
+                  <div
+                    key={index}
+                    onClick={() => router.push(item.route)}
+                    className={`flex items-center justify-between px-3 py-4 rounded-lg cursor-pointer font-medium transition-colors ${
+                      item.active
+                        ? "bg-[#FFECE5] text-[#E04E1E]"
+                        : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      {IconComponent && <IconComponent className="w-5 h-5" />}
+                      <span className="text-sm font-medium">{item.title}</span>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </nav>
-        </div>
-      </div>
+                );
+              })}
+            </nav>
 
-      {/* Bottom User Profile */}
-      <div className="px-6 py-4 border-t border-gray-200">
-        <div className="flex flex-row items-center gap-3 p-2 rounded-lg cursor-pointer">
-          <Avatar className="w-10 h-10">
-            <AvatarImage src={userData.avatar || "./images/Avatars.jpg"} />
-            <AvatarFallback>
-              {isLoading ? "..." : getInitials(userData.name)}
-            </AvatarFallback>
-          </Avatar>
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
-              {isLoading ? "Loading..." : userData.name}
-            </p>
-            <p className="text-xs text-gray-500 truncate">
-              {isLoading ? "Loading..." : userData.email}
-            </p>
+            {/* More Section */}
+            <div className="mt-auto ">
+              <span className="text-xs font-medium text-[#98A2B3] tracking-wider block mb-4">
+                More
+              </span>
+              <nav className="space-y-1 mb-8">
+                {sectionItems.map((item, index) => {
+                  const IconComponent = item.icon;
+                  return (
+                    <div
+                      key={index}
+                      onClick={
+                        item.title === "Logout"
+                          ? handleLogout
+                          : item.title === "Edit Profile"
+                          ? () => router.push("/edit-profile")
+                          : undefined
+                      }
+                      className="flex items-center justify-between px-3 py-4 rounded-lg cursor-pointer font-light text-[#282828] hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        {IconComponent && (
+                          <IconComponent className="w-5 h-5 text-[#282828]" />
+                        )}
+                        <span className="text-sm font-medium">
+                          {item.title}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom User Profile */}
+        <div className="px-2 py-4 border-t border-gray-200">
+          <div className="flex flex-row items-center gap-3 p-2 rounded-lg cursor-pointer">
+            <Avatar className="w-10 h-10">
+              <AvatarImage src={userData.avatar || "./images/Avatars.jpg"} />
+              <AvatarFallback>
+                {isLoading ? "..." : getInitials(userData.name || "")}
+              </AvatarFallback>
+            </Avatar>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-gray-900 truncate">
+                {isLoading ? "Loading..." : userData.name}
+              </p>
+              <p className="text-xs text-gray-500 truncate">
+                {isLoading ? "Loading..." : userData.email}
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 // "use client";
