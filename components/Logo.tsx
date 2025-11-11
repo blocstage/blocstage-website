@@ -7,9 +7,9 @@ export default function Logo() {
     <a href={pageRoutes.home} className="cursor-pointer">
       <Image
         className="justify-center items-center"
-        src="/images/logoorange.png"
+        src="/images/logodashboard.svg"
         alt="blocStage"
-        width={150}
+        width={120}
         height={40}
       />
     </a>

@@ -13,6 +13,7 @@ import { createSlug } from "@/lib/slugUtils";
 import { MapPin, Ticket, CalendarDays, Bell, DollarSign } from "lucide-react";
 import Link from "next/link";
 import { pageRoutes } from "../utils/pageRoutes";
+import { capitalizeWords, getGreeting } from "../utils/helpers";
 
 // Event type for user's events
 type Event = {
@@ -41,6 +42,7 @@ interface UserData {
 }
 
 const EventDashboard = () => {
+  const greeting = getGreeting();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -386,19 +388,20 @@ const EventDashboard = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 bg-[#F8F8F8] py-4 sm:py-6 lg:py-8 min-h-screen ml-0 md:ml-64">
+    // <div className="bg-red-300 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 ml-0 md:ml-64">
+    <div className="bg-red300">
       {/* Header section from the image */}
-      <div className="flex flex-row justify-between items-center mb-4 sm:mb-6 lg:mb-8">
+      {/* <div className="flex flex-row justify-between items-center mb-4 sm:mb-6 lg:mb-8">
         <h1 className="text-lg sm:text-xl font-bold text-[#282828]">Events</h1>
         <div className="bg-[#E4F0FC] p-2 rounded-md cursor-pointer">
           <Bell className="w-5 h-4 sm:w-6 sm:h-5 text-[#092C4C]" />
         </div>
-      </div>
+      </div> */}
       {/* Greeting and "Create Event" button */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 lg:mb-8 space-y-4 sm:space-y-0">
         <div className="flex flex-col">
           <h1 className="text-xl sm:text-2xl font-bold text-[#092C4C] mb-2">
-            Hi {userData.name}!
+            Good {greeting}, {capitalizeWords(userData?.name || "")}!
           </h1>
           <p className="text-sm sm:text-base text-gray-600">
             It&apos;s time to create and manage event

@@ -6,14 +6,13 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { pageRoutes } from "../../../../utils/pageRoutes";
 
-
 const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
     // Check if user is logged in
     const authToken = localStorage.getItem("authToken");
-    
+
     if (!authToken) {
       alert("Please log in to create an event.");
       router.push(pageRoutes.login);
@@ -22,8 +21,9 @@ const Page = () => {
   }, [router]);
 
   // Check if user is logged in before rendering
-  const authToken = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
-  
+  const authToken =
+    typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+
   if (!authToken) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -35,20 +35,7 @@ const Page = () => {
     );
   }
 
-  return (
-    <div className="flex min-h-screen flex-col">
-      
-       <Header />
-     
-      <div className="hidden md:block">
-      <Sidebar />
-      </div>
-      <main className="flex-1 mt-12">
-        <EventCreationWizard />
-      </main>
-      {/* <Footer /> */}
-    </div>
-  );
-  };
-  
-  export default Page;
+  return <EventCreationWizard />;
+};
+
+export default Page;

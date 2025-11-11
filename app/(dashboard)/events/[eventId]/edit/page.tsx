@@ -14,7 +14,7 @@ const EditEventPage = ({ params }: { params: { eventId: string } }) => {
   useEffect(() => {
     // Check if user is logged in
     const authToken = localStorage.getItem("authToken");
-    
+
     if (!authToken) {
       alert("Please log in to edit events.");
       router.push(pageRoutes.login);
@@ -23,8 +23,9 @@ const EditEventPage = ({ params }: { params: { eventId: string } }) => {
   }, [router]);
 
   // Check if user is logged in before rendering
-  const authToken = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
-  
+  const authToken =
+    typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+
   if (!authToken) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -36,18 +37,7 @@ const EditEventPage = ({ params }: { params: { eventId: string } }) => {
     );
   }
 
-  return (
-    <div className="flex min-h-screen flex-col">
-      <Header/>
-      <div className="hidden md:block">
-        <Sidebar />
-      </div>
-      <main className="flex-1 mt-12">
-        <EditEventForm eventId={params.eventId} />
-      </main>
-      {/* <Footer /> */}
-    </div>
-  );
+  return <EditEventForm eventId={params.eventId} />;
 };
 
 export default EditEventPage;
