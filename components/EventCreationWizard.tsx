@@ -5,11 +5,12 @@ import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import EventDetailsForm from "./EventDetailsForm";
 import EventDetailsPreview from "./EventDetailsPreview";
-import AgendaScheduleForm from "./AgendaScheduleForm";
+// import AgendaScheduleForm from "./AgendaScheduleForm";
 import TicketsForm from "./TicketsForm";
 import EventPreview from "./EventPreview";
 import { createSlug } from "@/lib/slugUtils";
 import { pageRoutes } from "../utils/pageRoutes";
+import AgendaScheduleForm from "./AgendaScheduleForm";
 
 const steps = [
   { id: "details", title: "Event Details", completed: false },

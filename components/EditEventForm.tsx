@@ -15,10 +15,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import AgendaScheduleForm from "./AgendaScheduleForm";
+// import AgendaScheduleForm from "../AgendaScheduleForm";
 import { validateDateTimeRange, showDateTimeAlert } from "@/lib/dateValidation";
 import LocationMap from "./LocationMap";
 import { pageRoutes } from "../utils/pageRoutes";
+import AgendaScheduleForm from "./AgendaScheduleForm";
 
 // Event data type
 export interface EventData {

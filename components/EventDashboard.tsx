@@ -388,15 +388,7 @@ const EventDashboard = () => {
   }
 
   return (
-    // <div className="bg-red-300 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 ml-0 md:ml-64">
     <div className="bg-red300">
-      {/* Header section from the image */}
-      {/* <div className="flex flex-row justify-between items-center mb-4 sm:mb-6 lg:mb-8">
-        <h1 className="text-lg sm:text-xl font-bold text-[#282828]">Events</h1>
-        <div className="bg-[#E4F0FC] p-2 rounded-md cursor-pointer">
-          <Bell className="w-5 h-4 sm:w-6 sm:h-5 text-[#092C4C]" />
-        </div>
-      </div> */}
       {/* Greeting and "Create Event" button */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 lg:mb-8 space-y-4 sm:space-y-0">
         <div className="flex flex-col">

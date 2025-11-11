@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import EditEventForm from "@/components/EditEventForm";
 import Sidebar from "@/components/dashboard/Sidebar";
-import Header from "@/components/Header";
+import Header from "@/components/landing/Header";
 import { pageRoutes } from "../../../../../utils/pageRoutes";
 export const dynamic = "force-dynamic";
 

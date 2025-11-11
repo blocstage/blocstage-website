@@ -3,8 +3,8 @@ import { MapPin, CalendarDays, Clock } from "lucide-react";
 
 import SpeakerCard from "@/components/SpeakerCard";
 import ShareButton from "@/components/ShareButton";
-import Header2 from "@/components/Header2";
-import Footer from "@/components/Footer";
+import Header2 from "@/components/landing/Header2";
+import Footer from "@/components/landing/Footer";
 import {
   extractEventIdFromSlug,
   createSlug,

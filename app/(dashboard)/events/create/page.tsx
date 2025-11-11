@@ -1,10 +1,8 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import EventCreationWizard from "@/components/EventCreationWizard";
-import Sidebar from "@/components/dashboard/Sidebar";
-import Header from "@/components/Header";
 import { pageRoutes } from "../../../../utils/pageRoutes";
+import EventCreationWizard from "../../../../components/EventCreationWizard";
 
 const Page = () => {
   const router = useRouter();
