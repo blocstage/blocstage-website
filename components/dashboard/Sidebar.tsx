@@ -13,8 +13,8 @@ import { getInitials } from "../../utils/helpers";
 import { useSideBarStore } from "../../store/SideBarStore";
 
 const sectionItems = [
-  { icon: LogOut, title: "Logout" },
   { icon: UserPen, title: "Edit Profile" },
+  { icon: LogOut, title: "Logout" },
 ];
 interface UserData {
   name: string;
