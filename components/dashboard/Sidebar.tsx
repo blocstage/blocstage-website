@@ -129,8 +129,10 @@ export default function Sidebar() {
     <>
       <div
         onClick={closeSideBar}
-        className={`bg-[#000]/10 fixed top-0 bottom-0 right-0 left-0 md:hidden ${
-          isSideBarOpen ? "max-md:translate-x-0" : "max-md:-translate-x-[200%]"
+        className={`bg-[#000]/10 fixed top-0 bottom-0 right-0 left-0 md:hidden duration-300 ${
+          isSideBarOpen
+            ? "max-md:translate-x-0 opacity-100"
+            : "max-md:-translate-x-[200%] opacity-0"
         } `}
       ></div>
       <div

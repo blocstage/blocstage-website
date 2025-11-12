@@ -285,7 +285,7 @@ export default function EventCreationWizard() {
   };
 
   return (
-    <div className="md:ml-64 max-w-6xl mx-auto px-8 py-8">
+    <div className="max-w-6xl mx-auto  py-8">
       {isLoading && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50">
           <div className="flex flex-col items-center">
