@@ -59,11 +59,11 @@ const TicketCard = () => {
           <div className="flex flex-col justify-between sm:flex-row gap-3 mt-3">
             <div>
               <p className=" font-light text-[#282828]">Date</p>
-              <p className="font-bold">Mon, 25th Dec, 2023</p>
+              <p className="max-sm:font-bold">Mon, 25th Dec, 2023</p>
             </div>
             <div className="sm:text-end">
               <p className="font-light text-[#282828]">Time</p>
-              <p className="font-bold">7:00 AM - 5:00 PM WAT</p>
+              <p className="max-sm:font-bold">7:00 AM - 5:00 PM WAT</p>
             </div>
           </div>
         </div>
