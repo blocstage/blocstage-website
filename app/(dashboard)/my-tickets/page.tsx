@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import TicketCard from "../../../components/dashboard/tickets/TicketCard";
+import Image from "next/image";
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState("Upcoming");
@@ -23,11 +24,23 @@ export default function Page() {
           </button>
         ))}
       </div>
-      <div className="flex flex-col gap-10">
-        <TicketCard />
-        <TicketCard />
-        <TicketCard />
-      </div>
+      {activeTab === "Upcoming" ? (
+        <div className="flex flex-col gap-10">
+          <TicketCard />
+          <TicketCard />
+          <TicketCard />
+        </div>
+      ) : (
+        <div className="h-[150px] mt-40 md:mt-60 ">
+          <Image
+            className="w-full h-full object-contain"
+            src="/images/no-tickets-illustration.svg"
+            alt="No Tickets"
+            width={400}
+            height={300}
+          />
+        </div>
+      )}
     </section>
   );
 }
