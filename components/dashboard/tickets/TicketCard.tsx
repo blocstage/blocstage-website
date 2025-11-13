@@ -75,7 +75,7 @@ const TicketCard = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-end gap-2 max-sm:mt-4">
+          <div className="flex items-end gap-2 max-sm:mt-4 max-sm:justify-between">
             <div>
               <div className="font-bold text-2xl">3246</div>
               <div className="w-[80px] sm:w-[100px]">
