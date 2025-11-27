@@ -1,16 +1,25 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Calendar, X, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Calendar,
+  X,
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import AgendaScheduleForm from "./AgendaScheduleForm";
+// import AgendaScheduleForm from "../AgendaScheduleForm";
 import { validateDateTimeRange, showDateTimeAlert } from "@/lib/dateValidation";
 import LocationMap from "./LocationMap";
+import { pageRoutes } from "../utils/pageRoutes";
+import AgendaScheduleForm from "./AgendaScheduleForm";
 
 // Event data type
 export interface EventData {
@@ -52,7 +61,13 @@ interface TagInputProps {
   placeholder: string;
 }
 
-const TagInput = ({ label, value, allOptions, onUpdate, placeholder }: TagInputProps) => {
+const TagInput = ({
+  label,
+  value,
+  allOptions,
+  onUpdate,
+  placeholder,
+}: TagInputProps) => {
   const [inputValue, setInputValue] = useState("");
   const [suggestedOptions, setSuggestedOptions] = useState<string[]>([]);
 
@@ -61,7 +76,9 @@ const TagInput = ({ label, value, allOptions, onUpdate, placeholder }: TagInputP
     setInputValue(term);
     if (term.length > 0) {
       const filtered = allOptions.filter(
-        (option) => option.toLowerCase().includes(term.toLowerCase()) && !value.includes(option)
+        (option) =>
+          option.toLowerCase().includes(term.toLowerCase()) &&
+          !value.includes(option)
       );
       setSuggestedOptions(filtered);
     } else {
@@ -152,7 +169,7 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
   const steps = [
     { title: "Event Details", description: "Basic event information" },
     { title: "Agenda & Sessions", description: "Event schedule and sessions" },
-    { title: "Review & Save", description: "Review and save changes" }
+    { title: "Review & Save", description: "Review and save changes" },
   ];
 
   const allCategories = [
@@ -163,12 +180,25 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
     "Concert",
     "Art Exhibition",
     "Sports Event",
-    "Web3 Event"
+    "Web3 Event",
   ];
   const allTags = [
-    "Music", "Networking", "Workshop", "Hackathon", "Codelab", "Web3", "Health",
-    "Fitness", "Art", "Technology", "Education", "Business", "Startup", 
-    "Food & Drink", "Travel", "Photography"
+    "Music",
+    "Networking",
+    "Workshop",
+    "Hackathon",
+    "Codelab",
+    "Web3",
+    "Health",
+    "Fitness",
+    "Art",
+    "Technology",
+    "Education",
+    "Business",
+    "Startup",
+    "Food & Drink",
+    "Travel",
+    "Photography",
   ];
 
   // Fetch event data
@@ -182,33 +212,42 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
           return;
         }
 
-        const response = await fetch(`https://api.blocstage.com/events/${eventId}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
+        const response = await fetch(
+          `https://api.blocstage.com/events/${eventId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           if (response.status === 401) {
             setError("Authentication failed. Please log in again.");
-            router.push("/login");
+            router.push(pageRoutes.login);
             return;
           }
           const errorText = await response.text();
           console.error("Failed to fetch event data:", errorText);
-          throw new Error(`Failed to load event: ${response.status} ${response.statusText} - ${errorText}`);
+          throw new Error(
+            `Failed to load event: ${response.status} ${response.statusText} - ${errorText}`
+          );
         }
 
         const data = await response.json();
-        
+
         setEventData({
           id: data.id,
           title: data.title || "",
           description: data.description || "",
           location: data.location || "",
-          category: Array.isArray(data.category) ? data.category : (data.category ? [data.category] : []),
+          category: Array.isArray(data.category)
+            ? data.category
+            : data.category
+            ? [data.category]
+            : [],
           isOnline: data.isOnline || false,
           start_time: data.start_time || "",
           end_time: data.end_time || "",
@@ -216,7 +255,6 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
           image_url: data.image_url || data.banner_image_url,
           sessions: data.sessions || [],
         });
-
       } catch (e: any) {
         console.error("Failed to fetch event data:", e);
         setError(`Failed to load event: ${e.message}`);
@@ -246,7 +284,12 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
         if (response.ok) {
           const user = await response.json();
           setUserData({
-            username: user.username || user.name || user.full_name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || "User",
+            username:
+              user.username ||
+              user.name ||
+              user.full_name ||
+              `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+              "User",
           });
         }
       } catch (error) {
@@ -259,8 +302,7 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
 
   const handleChange = (update: Partial<EventData>) => {
     // Validate date/time if updating start_time or end_time
-   
-    
+
     setEventData((prev) => ({ ...prev, ...update }));
   };
 
@@ -288,7 +330,7 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
       const authToken = localStorage.getItem("authToken");
       if (!authToken) {
         setError("Please log in to save changes.");
-        router.push("/login");
+        router.push(pageRoutes.login);
         return;
       }
 
@@ -328,32 +370,35 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
         sessions: eventData.sessions || [],
       };
 
-
-      const response = await fetch(`https://api.blocstage.com/events/${eventId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        `https://api.blocstage.com/events/${eventId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (!response.ok) {
         if (response.status === 401) {
           setError("Authentication failed. Please log in again.");
-          router.push("/login");
+          router.push(pageRoutes.login);
           return;
         }
         const errorText = await response.text();
         console.error("API Error Response:", errorText);
-        throw new Error(`Failed to update event: ${response.status} ${response.statusText} - ${errorText}`);
+        throw new Error(
+          `Failed to update event: ${response.status} ${response.statusText} - ${errorText}`
+        );
       }
 
       const responseData = await response.json();
 
       alert("Event updated successfully!");
-      router.push(`/event/${eventId}`);
-
+      router.push(pageRoutes.events);
     } catch (e: any) {
       console.error("Error updating event:", e);
       setError(`Failed to update event: ${e.message}`);
@@ -366,7 +411,7 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-t-4 border-[#F4511E] border-gray-200 rounded-full animate-spin mb-4 mx-auto"></div>
+          <div className="w-16 h-16 border-4 border-t-4 bordr-[#F4511E] border-gray-200 rounded-full animate-spin mb-4 mx-auto"></div>
           <p>Loading event details...</p>
         </div>
       </div>
@@ -378,8 +423,8 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
       <div className="flex justify-center items-center h-screen">
         <div className="text-center">
           <p className="text-red-500 mb-4">{error}</p>
-          <button 
-            onClick={() => router.refresh()} 
+          <button
+            onClick={() => router.refresh()}
             className="px-4 py-2 bg-[#092C4C] text-white rounded hover:bg-[#0a3a5c]"
           >
             Retry
@@ -406,7 +451,9 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
                 {index + 1}
               </div>
               <div className="mt-2 text-center">
-                <p className="text-xs font-medium text-[#092C4C]">{step.title}</p>
+                <p className="text-xs font-medium text-[#092C4C]">
+                  {step.title}
+                </p>
                 <p className="text-xs text-gray-500">{step.description}</p>
               </div>
             </div>
@@ -424,21 +471,25 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
   );
 
   return (
-    <div className="md:ml-64 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-6 lg:py-8">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-4 sm:mb-6 lg:mb-8">
-        <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500 mb-4">
+        {/* <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500 mb-4">
           <a href="/viewevent" className="hover:underline">
             <span className="text-orange-500">Event</span>
           </a>
           <span>/</span>
           <span>Edit Event</span>
-        </div>
-        
+        </div> */}
+
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-[#092C4C] mb-2">Hi {userData.username}!</h1>
-            <p className="text-sm sm:text-base text-gray-600">Edit your event details</p>
+            {/* <h1 className="text-xl sm:text-2xl font-bold text-[#092C4C] mb-2">
+              Hi {userData.username}!
+            </h1> */}
+            <p className="text-sm sm:text-base text-gray-600">
+              Edit your event details
+            </p>
           </div>
           <Button
             variant="outline"
@@ -517,7 +568,7 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
                 </label>
               </div>
             </div>
-            
+
             {/* Event Category */}
             <TagInput
               label="Event Category"
@@ -538,7 +589,9 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
                     type="datetime-local"
                     step="1"
                     value={eventData.start_time}
-                    onChange={(e) => handleChange({ start_time: e.target.value })}
+                    onChange={(e) =>
+                      handleChange({ start_time: e.target.value })
+                    }
                     className="w-full"
                   />
                   <Calendar className="absolute right-3 top-3 h-4 w-4 text-gray-400 pointer-events-none" />
@@ -588,34 +641,60 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
             <h2 className="text-lg font-light text-gray-900 mb-6">
               Review & Save Changes
             </h2>
-            
+
             <div className="space-y-6">
               <div>
-                <h3 className="text-md font-medium text-gray-900 mb-2">Event Information</h3>
+                <h3 className="text-md font-medium text-gray-900 mb-2">
+                  Event Information
+                </h3>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p><strong>Title:</strong> {eventData.title}</p>
-                  <p><strong>Description:</strong> {eventData.description}</p>
-                  <p><strong>Location:</strong> {eventData.location}</p>
-                  <p><strong>Type:</strong> {eventData.isOnline ? "Online Event" : "In-Person Event"}</p>
-                  <p><strong>Start:</strong> {eventData.start_time}</p>
-                  <p><strong>End:</strong> {eventData.end_time}</p>
-                  <p><strong>Categories:</strong> {eventData.category.join(", ")}</p>
-                  <p><strong>Tags:</strong> {eventData.tags?.join(", ") || "None"}</p>
+                  <p>
+                    <strong>Title:</strong> {eventData.title}
+                  </p>
+                  <p>
+                    <strong>Description:</strong> {eventData.description}
+                  </p>
+                  <p>
+                    <strong>Location:</strong> {eventData.location}
+                  </p>
+                  <p>
+                    <strong>Type:</strong>{" "}
+                    {eventData.isOnline ? "Online Event" : "In-Person Event"}
+                  </p>
+                  <p>
+                    <strong>Start:</strong> {eventData.start_time}
+                  </p>
+                  <p>
+                    <strong>End:</strong> {eventData.end_time}
+                  </p>
+                  <p>
+                    <strong>Categories:</strong> {eventData.category.join(", ")}
+                  </p>
+                  <p>
+                    <strong>Tags:</strong>{" "}
+                    {eventData.tags?.join(", ") || "None"}
+                  </p>
                 </div>
               </div>
 
               {eventData.sessions && eventData.sessions.length > 0 && (
                 <div>
-                  <h3 className="text-md font-medium text-gray-900 mb-2">Sessions ({eventData.sessions.length})</h3>
+                  <h3 className="text-md font-medium text-gray-900 mb-2">
+                    Sessions ({eventData.sessions.length})
+                  </h3>
                   <div className="space-y-2">
                     {eventData.sessions.map((session, index) => (
                       <div key={index} className="bg-gray-50 p-3 rounded-lg">
-                        <p><strong>{session.title}</strong></p>
+                        <p>
+                          <strong>{session.title}</strong>
+                        </p>
                         <p className="text-sm text-gray-600">
                           {session.start_time} - {session.end_time}
                         </p>
                         {session.speaker_name && (
-                          <p className="text-sm text-gray-600">Speaker: {session.speaker_name}</p>
+                          <p className="text-sm text-gray-600">
+                            Speaker: {session.speaker_name}
+                          </p>
                         )}
                       </div>
                     ))}
@@ -640,7 +719,7 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
               </Button>
             )}
           </div>
-          
+
           <div className="flex gap-4">
             <Button
               variant="outline"
@@ -649,7 +728,7 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
             >
               Cancel
             </Button>
-            
+
             {currentStep < steps.length - 1 ? (
               <Button
                 onClick={handleNext}

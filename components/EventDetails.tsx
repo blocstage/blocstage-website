@@ -1,7 +1,9 @@
-"use client"; 
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @next/next/no-img-element */
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   MapPin,
   CalendarDays,
@@ -10,7 +12,8 @@ import {
   ArrowLeft,
   Calendar,
   Bell,
-} from 'lucide-react'; // Ensure you have lucide-react installed
+} from "lucide-react"; // Ensure you have lucide-react installed
+import { pageRoutes } from "../utils/pageRoutes";
 
 interface EventDetailsProps {
   eventId: string; // The ID of the event to display
@@ -46,14 +49,15 @@ interface EventOverview {
   totalRevenueGenerated: number;
 }
 
-
 const EventDetails = ({ eventId }: EventDetailsProps) => {
   const [eventData, setEventData] = useState<EventData | null>(null);
-  const [eventOverview, setEventOverview] = useState<EventOverview | null>(null);
+  const [eventOverview, setEventOverview] = useState<EventOverview | null>(
+    null
+  );
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState('Upcoming'); // Matches the initial state in the image
+  const [activeTab, setActiveTab] = useState("Upcoming"); // Matches the initial state in the image
   const router = useRouter();
 
   // Function to fetch analytics data for the event
@@ -66,13 +70,16 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
         return { total_tickets_sold: 0, total_revenue: 0 };
       }
 
-      const response = await fetch(`https://api.blocstage.com/events/${eventId}/analytics`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+      const response = await fetch(
+        `https://api.blocstage.com/events/${eventId}/analytics`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         // If analytics endpoint fails, return default values
@@ -97,13 +104,16 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
         return [];
       }
 
-      const response = await fetch(`https://api.blocstage.com/events/${eventId}/sessions`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+      const response = await fetch(
+        `https://api.blocstage.com/events/${eventId}/sessions`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         // If sessions endpoint fails, return empty array
@@ -131,14 +141,17 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
         }
 
         // Fetch event data
-        const response = await fetch(`https://api.blocstage.com/events/${eventId}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        
+        const response = await fetch(
+          `https://api.blocstage.com/events/${eventId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
         if (!response.ok) {
           if (response.status === 401) {
             setError("Authentication failed. Please log in again.");
@@ -147,26 +160,27 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
           }
           // Attempt to read error message from body if available
           const errorText = await response.text();
-          throw new Error(`HTTP error! Status: ${response.status} - ${errorText}`);
+          throw new Error(
+            `HTTP error! Status: ${response.status} - ${errorText}`
+          );
         }
-        
+
         const data: EventData = await response.json();
         setEventData(data);
-        
+
         // Fetch analytics data for accurate ticket sales and revenue
         const analytics = await fetchEventAnalytics(eventId);
-        
+
         // Fetch sessions data from dedicated endpoint
         const sessionsData = await fetchEventSessions(eventId);
         setSessions(sessionsData);
-        
+
         // Populate event overview with analytics data
         setEventOverview({
           totalEventsCreated: 1, // This typically comes from a different aggregate API
           totalTicketsSold: Number(analytics.total_tickets_sold) || 0,
           totalRevenueGenerated: Number(analytics.total_revenue) || 0,
         });
-
       } catch (e: any) {
         console.error("Failed to fetch event data:", e);
         setError(`Failed to load event details: ${e.message}`);
@@ -174,14 +188,13 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
         setLoading(false);
       }
     };
-    
+
     if (eventId) {
       fetchEventData();
     } else {
       setLoading(false);
       setError("No event ID provided.");
     }
-
   }, [eventId]); // Depend on eventId so data refetches if ID changes
 
   if (loading) {
@@ -210,12 +223,22 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
 
   // Helper functions for date and time formatting
   const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   const formatTime = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: true, timeZoneName: 'short' };
+    const options: Intl.DateTimeFormatOptions = {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+      timeZoneName: "short",
+    };
     return new Date(dateString).toLocaleTimeString(undefined, options);
   };
 
@@ -224,7 +247,9 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
   const formattedEndTime = formatTime(eventData.end_time);
 
   const handleCancelEvent = async () => {
-    const userConfirmed = window.confirm("Are you sure you want to cancel this event? This action cannot be undone.");
+    const userConfirmed = window.confirm(
+      "Are you sure you want to cancel this event? This action cannot be undone."
+    );
     if (!userConfirmed) return;
 
     try {
@@ -235,21 +260,26 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
         return;
       }
 
-      const response = await fetch(`https://api.blocstage.com/events/${eventId}/cancel`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+      const response = await fetch(
+        `https://api.blocstage.com/events/${eventId}/cancel`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`HTTP error! Status: ${response.status} - ${errorText}`);
+        throw new Error(
+          `HTTP error! Status: ${response.status} - ${errorText}`
+        );
       }
 
       alert("Event cancelled successfully.");
-      router.push("/viewevent");
+      router.push(pageRoutes.events);
     } catch (e: any) {
       console.error("Failed to cancel event:", e);
       alert(`Failed to cancel event: ${e.message}`);
@@ -280,12 +310,15 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
               {eventData.title}
             </h1>
             <div className="flex flex-col gap-2">
-            <a href={`/edit-event/${eventData.id}`}>
-              <button className="bg-[#0C2D48] text-white px-6 py-3 rounded-md font-medium text-sm hover:bg-[#092C4C] transition-colors self-start lg:self-auto">
-                Edit Event Details
-              </button>
-            </a>
-            <button onClick={handleCancelEvent} className="bg-[#E04E1E] text-white px-6 py-3 rounded-md font-medium text-sm hover:bg-orange-600 transition-colors self-start lg:self-auto">
+              <a href={`/edit-event/${eventData.id}`}>
+                <button className="bg-[#0C2D48] text-white px-6 py-3 rounded-md font-medium text-sm hover:bg-[#092C4C] transition-colors self-start lg:self-auto">
+                  Edit Event Details
+                </button>
+              </a>
+              <button
+                onClick={handleCancelEvent}
+                className="bg-[#E04E1E] text-white px-6 py-3 rounded-md font-medium text-sm hover:bg-orange-600 transition-colors self-start lg:self-auto"
+              >
                 Cancel Event
               </button>
             </div>
@@ -299,22 +332,31 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
             </div>
             <div className="flex items-center space-x-3">
               <Calendar className="w-5 h-5 text-gray-500" />
-              <span className="font-medium">{formattedStartTime} - {formattedEndTime}</span>
+              <span className="font-medium">
+                {formattedStartTime} - {formattedEndTime}
+              </span>
             </div>
             <div className="flex items-start space-x-3">
               <MapPin className="w-5 h-5 text-gray-500 flex-shrink-0 mt-1" />
-              <span className="font-medium">{eventData.location || "Online Event"}</span>
+              <span className="font-medium">
+                {eventData.location || "Online Event"}
+              </span>
             </div>
             <div className="flex items-start space-x-3">
               <div className="w-5 h-5 text-gray-500 flex-shrink-0 mt-1">
                 <Calendar className="w-5 h-5" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 mb-3">Event Sessions</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">
+                  Event Sessions
+                </h3>
                 {sessions && sessions.length > 0 ? (
                   <div className="space-y-3">
                     {sessions.map((session, index) => (
-                      <div key={session.id || index} className="bg-gray-50 p-4 rounded-lg">
+                      <div
+                        key={session.id || index}
+                        className="bg-gray-50 p-4 rounded-lg"
+                      >
                         <div className="flex items-start space-x-3">
                           {session.image_url && (
                             <img
@@ -324,25 +366,36 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
                             />
                           )}
                           <div className="flex-1">
-                            <h4 className="font-medium text-gray-900">{session.title}</h4>
-                            <p className="text-sm text-gray-600 mb-2">{session.speaker_name}</p>
+                            <h4 className="font-medium text-gray-900">
+                              {session.title}
+                            </h4>
+                            <p className="text-sm text-gray-600 mb-2">
+                              {session.speaker_name}
+                            </p>
                             <div className="flex items-center space-x-4 text-sm text-gray-500">
                               <span>
-                                {new Date(session.start_time).toLocaleTimeString("en-US", {
+                                {new Date(
+                                  session.start_time
+                                ).toLocaleTimeString("en-US", {
                                   hour: "2-digit",
                                   minute: "2-digit",
                                 })}
                               </span>
                               <span>•</span>
                               <span>
-                                {new Date(session.end_time).toLocaleTimeString("en-US", {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                })}
+                                {new Date(session.end_time).toLocaleTimeString(
+                                  "en-US",
+                                  {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  }
+                                )}
                               </span>
                             </div>
                             {session.description && (
-                              <p className="text-sm text-gray-600 mt-2">{session.description}</p>
+                              <p className="text-sm text-gray-600 mt-2">
+                                {session.description}
+                              </p>
                             )}
                           </div>
                         </div>
@@ -350,14 +403,15 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-500 text-sm">No sessions scheduled for this event.</p>
+                  <p className="text-gray-500 text-sm">
+                    No sessions scheduled for this event.
+                  </p>
                 )}
               </div>
             </div>
           </div>
 
           {/* Event Tabs */}
-          
         </div>
 
         {/* Event Overview Section */}
@@ -373,7 +427,7 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900">
-                  {eventOverview?.totalRevenueGenerated === 0 ? 'Free' : 'Paid'}
+                  {eventOverview?.totalRevenueGenerated === 0 ? "Free" : "Paid"}
                 </p>
                 <p className="text-sm text-gray-500">Event Type</p>
               </div>
@@ -397,7 +451,10 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900">
-                  {Number(eventOverview?.totalRevenueGenerated ?? 0).toLocaleString()} USDC
+                  {Number(
+                    eventOverview?.totalRevenueGenerated ?? 0
+                  ).toLocaleString()}{" "}
+                  USDC
                 </p>
                 <p className="text-sm text-gray-500">Total Revenue Generated</p>
               </div>
@@ -409,4 +466,4 @@ const EventDetails = ({ eventId }: EventDetailsProps) => {
   );
 };
 
-export default EventDetails;  
+export default EventDetails;

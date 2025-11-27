@@ -154,7 +154,7 @@ const BuyTicketsPage = ({ eventId, ticketsData }: BuyTicketsPageProps) => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
           <div className="flex justify-center items-center h-64">
             <div className="text-center">
-              <div className="w-16 h-16 border-4 border-t-4 border-[#F4511E] border-gray-200 rounded-full animate-spin mb-4 mx-auto"></div>
+              <div className="w-16 h-16 border-4 border-t-4 borde-[#F4511E] border-gray-200 rounded-full animate-spin mb-4 mx-auto"></div>
               <p className="text-gray-600">Loading tickets...</p>
             </div>
           </div>

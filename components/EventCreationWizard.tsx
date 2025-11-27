@@ -5,10 +5,12 @@ import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import EventDetailsForm from "./EventDetailsForm";
 import EventDetailsPreview from "./EventDetailsPreview";
-import AgendaScheduleForm from "./AgendaScheduleForm";
+// import AgendaScheduleForm from "./AgendaScheduleForm";
 import TicketsForm from "./TicketsForm";
 import EventPreview from "./EventPreview";
 import { createSlug } from "@/lib/slugUtils";
+import { pageRoutes } from "../utils/pageRoutes";
+import AgendaScheduleForm from "./AgendaScheduleForm";
 
 const steps = [
   { id: "details", title: "Event Details", completed: false },
@@ -41,7 +43,7 @@ export default function EventCreationWizard() {
     tickets: [],
   });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleNext = () => {
@@ -63,7 +65,7 @@ export default function EventCreationWizard() {
   const handleStepClick = (index: number) => {
     setCurrentStep(index);
   };
- const uploadImageToCloudinary = async (imageFile: File) => {
+  const uploadImageToCloudinary = async (imageFile: File) => {
     const cloudName = "dsohqp4d9"; // Your Cloudinary cloud name
     const unsignedUploadPreset = "blocstage"; // Your upload preset
 
@@ -93,20 +95,24 @@ export default function EventCreationWizard() {
       throw error;
     }
   };
-     const handlePublish = async () => {
+  const handlePublish = async () => {
     setIsLoading(true);
 
     try {
       const authToken = localStorage.getItem("authToken");
       if (!authToken) {
         alert("Authentication token not found. Please log in.");
-        router.push("/login");
+        router.push(pageRoutes.login);
         return;
       }
 
       // 1. Upload image if it's a File
       let imageUrl = eventData.image;
-      if (eventData.image && typeof eventData.image === "object" && (eventData.image as any) instanceof File) {
+      if (
+        eventData.image &&
+        typeof eventData.image === "object" &&
+        (eventData.image as any) instanceof File
+      ) {
         try {
           imageUrl = await uploadImageToCloudinary(eventData.image);
         } catch (error) {
@@ -160,29 +166,35 @@ export default function EventCreationWizard() {
         location: eventData.location?.trim() || "",
         start_time: eventData.start_time || "",
         end_time: eventData.end_time || "",
-        category: Array.isArray(eventData.category) && eventData.category.length > 0 ? eventData.category[0] : "",
+        category:
+          Array.isArray(eventData.category) && eventData.category.length > 0
+            ? eventData.category[0]
+            : "",
         tags: Array.isArray(eventData.tags) ? eventData.tags : [],
         image_url: imageUrl || null,
         sessions: sessionsPayload,
       };
 
-
       // 6. Validate JSON serialization and clean data
       try {
         // Remove any undefined values and ensure all values are serializable
-        const cleanPayload = JSON.parse(JSON.stringify(payload, (key, value) => {
-          if (value === undefined) return null;
-          if (typeof value === 'string' && value.trim() === '') return null;
-          return value;
-        }));
-        
+        const cleanPayload = JSON.parse(
+          JSON.stringify(payload, (key, value) => {
+            if (value === undefined) return null;
+            if (typeof value === "string" && value.trim() === "") return null;
+            return value;
+          })
+        );
+
         const jsonString = JSON.stringify(cleanPayload);
-        
+
         // Update payload with cleaned version
         Object.assign(payload, cleanPayload);
       } catch (error) {
         console.error("JSON serialization error:", error);
-        alert("Error preparing data for submission. Please check all fields and try again.");
+        alert(
+          "Error preparing data for submission. Please check all fields and try again."
+        );
         return;
       }
 
@@ -201,15 +213,20 @@ export default function EventCreationWizard() {
         console.error("Event creation error response:", errorText);
         console.error("Request payload:", JSON.stringify(payload, null, 2));
         console.error("Response status:", response.status);
-        console.error("Response headers:", Object.fromEntries(response.headers.entries()));
-        
+        console.error(
+          "Response headers:",
+          Object.fromEntries(response.headers.entries())
+        );
+
         if (response.status === 401) {
           alert("Authentication failed. Please log in again.");
-          router.push("/login");
+          router.push(pageRoutes.login);
           return;
         }
-        
-        alert(`Failed to publish event: ${response.status} ${response.statusText}\n\nError details: ${errorText}`);
+
+        alert(
+          `Failed to publish event: ${response.status} ${response.statusText}\n\nError details: ${errorText}`
+        );
         throw new Error(
           `Failed to publish event: ${response.status} ${response.statusText}`
         );
@@ -220,7 +237,6 @@ export default function EventCreationWizard() {
       // Submit tickets if any exist
       if (eventData.tickets && eventData.tickets.length > 0) {
         try {
-          
           for (const ticket of eventData.tickets) {
             const ticketPayload = {
               name: ticket.name,
@@ -228,35 +244,38 @@ export default function EventCreationWizard() {
               price: ticket.is_free ? "0.00" : ticket.price,
               currency: ticket.currency,
               is_free: ticket.is_free,
-              total_supply: ticket.total_supply
+              total_supply: ticket.total_supply,
             };
 
-
-            const ticketResponse = await fetch(`https://api.blocstage.com/events/${responseData.id}/tickets`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`,
-              },
-              body: JSON.stringify(ticketPayload)
-            });
+            const ticketResponse = await fetch(
+              `https://api.blocstage.com/events/${responseData.id}/tickets`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify(ticketPayload),
+              }
+            );
 
             if (!ticketResponse.ok) {
-              throw new Error(`Failed to create ticket: ${ticketResponse.statusText}`);
+              throw new Error(
+                `Failed to create ticket: ${ticketResponse.statusText}`
+              );
             }
           }
-
         } catch (ticketError) {
-          console.error('Error submitting tickets:', ticketError);
-          alert('Event created but failed to submit tickets. You can add them later.');
+          console.error("Error submitting tickets:", ticketError);
+          alert(
+            "Event created but failed to submit tickets. You can add them later."
+          );
         }
       }
 
       alert("Event published successfully!");
-      const destination = `/viewevent`;
+      const destination = pageRoutes.events;
       router.push(destination);
-
-      
     } catch (error: any) {
       console.error("Error publishing event:", error);
       alert(error.message || "An error occurred while publishing the event.");
@@ -266,15 +285,15 @@ export default function EventCreationWizard() {
   };
 
   return (
-    <div className="md:ml-64 max-w-6xl mx-auto px-8 py-8">
+    <div className="max-w-6xl mx-auto  py-8">
       {isLoading && (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50">
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 border-4 border-t-4 border-[#F4511E] border-gray-200 rounded-full animate-spin mb-4"></div>
-          <p className="text-white text-lg">Publishing your event...</p>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50">
+          <div className="flex flex-col items-center">
+            <div className="w-16 h-16 border-4 border-t-4 border[#F4511E] border-gray-200 rounded-full animate-spin mb-4"></div>
+            <p className="text-white text-lg">Publishing your event...</p>
+          </div>
         </div>
-      </div>
-    )}
+      )}
       {showSuccessModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
           <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
@@ -292,60 +311,59 @@ export default function EventCreationWizard() {
       )}
       {/* Breadcrumb */}
       <div className="mb-8">
-        <h1 className="text-[#092C4C] font-bold mb-4">Event</h1>
+        <h1 className="text-[#092C4C] font-bold mb-4">Create Event</h1>
 
-        <div className="flex items-center text-md text-gray-500">
+        {/* <div className="flex items-center text-md text-gray-500">
           <a href="/viewevent" className="hover:underline">
           <span className="text-orange-500">Event</span>
           </a>
           <span className="mx-2">/</span>
           <span>Create Event</span>
-        </div>
+        </div> */}
       </div>
 
       {/* Progress Steps */}
-   <div className="mb-6">
-  <div className="flex items-center justify-between ">
-    {steps.map((step, index) => (
-      <div key={step.id} className="flex items-center flex-1">
-        <div
-          className="flex flex-col items-center cursor-pointer"
-          onClick={() => handleStepClick(index)}
-        >
-          {/* Step Circle */}
-          <div
-            className={`w-5 h-5 rounded-full flex items-center justify-center border-2 ${
-              index < currentStep
-                ? "bg-[#092C4C] border-[#092C4C] text-white"
-                : index === currentStep
-                ? "bg-white border-[#092C4C] text-[#092C4C]"
-                : "border-gray-300 text-gray-400"
-            }`}
-          >
-            {index < currentStep && <Check className="w-4 h-4" />}
-          </div>
-          {/* Step Name */}
-          {/* <span className="mt-2 text-xs text-center text-gray-700 max-w-[80px]">
+      <div className="mb-6">
+        <div className="flex items-center justify-between ">
+          {steps.map((step, index) => (
+            <div key={step.id} className="flex items-center flex-1">
+              <div
+                className="flex flex-col items-center cursor-pointer"
+                onClick={() => handleStepClick(index)}
+              >
+                {/* Step Circle */}
+                <div
+                  className={`w-5 h-5 rounded-full flex items-center justify-center border-2 ${
+                    index < currentStep
+                      ? "bg-[#092C4C] border-[#092C4C] text-white"
+                      : index === currentStep
+                      ? "bg-white border-[#092C4C] text-[#092C4C]"
+                      : "border-gray-300 text-gray-400"
+                  }`}
+                >
+                  {index < currentStep && <Check className="w-4 h-4" />}
+                </div>
+                {/* Step Name */}
+                {/* <span className="mt-2 text-xs text-center text-gray-700 max-w-[80px]">
             {step.title}
           </span> */}
+              </div>
+              {/* Progress Bar */}
+              {index < steps.length - 1 && (
+                <div
+                  className={`flex-1 flex-row w-2.5 h-1.5 ${
+                    index < currentStep ? "bg-[#092C4C]" : "bg-gray-200"
+                  }`}
+                />
+              )}
+            </div>
+          ))}
         </div>
-        {/* Progress Bar */}
-        {index < steps.length - 1 && (
-          <div
-            className={`flex-1 flex-row w-2.5 h-1.5 ${
-              index < currentStep ? "bg-[#092C4C]" : "bg-gray-200"
-            }`}
-          />
-        )}
       </div>
-    ))}
-  </div>
-</div>
       {/* Content */}
       <div className=" rounded-lg">
         <div className="p-2">
           {currentStep === 0 && (
-            
             <EventDetailsForm
               data={eventData as any}
               onUpdate={updateEventData}
