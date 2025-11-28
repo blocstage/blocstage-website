@@ -1,3 +1,4 @@
+import BuyTicketPage from "@/components/BuyTicketPage";
 import { createSlug } from "../lib/slugUtils";
 
 export const pageRoutes = {
@@ -20,6 +21,8 @@ export const pageRoutes = {
     return `/events/${slug}/preview`;
   },
 
+  // Tickets routes
+  buyTicketsPage : (eventId: string) => `/buy-ticket?eventId=${eventId}`,
 
   //profile routes
   editProfile : '/edit-profile',

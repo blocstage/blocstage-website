@@ -10,6 +10,7 @@ import {
   createSlug,
   findEventByTitleSlug,
 } from "@/lib/slugUtils";
+import { pageRoutes } from "@/utils/pageRoutes";
 
 type Session = {
   title: string;
@@ -180,7 +181,7 @@ export default async function EventPreviewPage({
 
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
               <a
-                href={`/buy-ticket?eventId=${event.id}`}
+                href={pageRoutes.buyTicketsPage(event.id)}
                 className="w-full sm:w-auto"
               >
                 <button className="bg-[#0C2D48] text-white px-6 py-2 rounded-md hover:bg-[#0C2D48] transition-colors font-semibold w-full sm:w-auto">

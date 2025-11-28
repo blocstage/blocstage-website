@@ -290,8 +290,8 @@ const TicketCard = ({
   const [showBenefits, setShowBenefits] = useState(false);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 mb-4">
-      <div className="flex justify-between items-start">
+    <div className="bg-white border border-gray-200 rounded-lg p-6  min-h-[200px]">
+      <div className="flex justify-between items-start ">
         <div className="flex-1">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-lg font-bold text-[#092C4C]">{ticket.name}</h2>
@@ -417,8 +417,8 @@ const SummaryCard = ({
   onButtonClick,
   disabled,
 }: SummaryCardProps) => (
-  <div className="bg-white border border-gray-200 rounded-lg p-6">
-    <h2 className="text-lg font-bold text-[#092C4C] mb-4">Summary</h2>
+  <div className="bg-white border border-gray-200 rounded-lg p-4 ">
+    <h2 className="text-lg font-bold text-[#092C4C] ">Summary</h2>
     <div className="space-y-3 text-sm">
       {summaryItems.map((item, index) => (
         <div key={index} className="flex justify-between">
@@ -660,14 +660,14 @@ const ContactInformationPage = ({
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  placeholder="e.g Regular"
+                  placeholder="e.g John"
                 />
                 <InputField
                   label="Last Name"
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  placeholder="e.g Regular"
+                  placeholder="e.g Doe"
                 />
               </div>
               <InputField
@@ -676,7 +676,7 @@ const ContactInformationPage = ({
                 type="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="e.g Regular"
+                placeholder="e.g johndoe@example.com"
               />
               <InputField
                 label="Phone Number"
@@ -684,7 +684,7 @@ const ContactInformationPage = ({
                 type="tel"
                 value={formData.phone}
                 onChange={handleInputChange}
-                placeholder="e.g Regular"
+                placeholder="+234999000000"
               />
               <button
                 type="submit"
